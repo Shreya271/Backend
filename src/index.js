@@ -1,13 +1,21 @@
 import dotenv from "dotenv";
-dotenv.config({ path: './.env' }); // Add the dot before env
+dotenv.config({ path: './.env' }); // Ensure .env file is properly loaded
 
 import connectDB from "./db/index.js";
+import app from "./app.js"; // Assuming `app.js` defines an Express app
 
-connectDB();
+connectDB()
+    .then(() => {
+        app.listen(process.env.PORT || 8000, () => {
+            console.log(`SERVER IS RUNNING AT PORT: ${process.env.PORT || 8000}`);
+        });
+    })
+    .catch((err) => {
+        console.log("MONGO DB CONNECTION FAILED!!!", err);
+    });
 
 console.log("MONGODB_URI:", process.env.MONGODB_URI); // Should print the value if loaded correctly
 console.log("PORT:", process.env.PORT);
-
 
 
 // import mongoose from "mongoose";
